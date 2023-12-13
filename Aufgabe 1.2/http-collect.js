@@ -1,13 +1,12 @@
-const http = require('http');
-const bl = require('bl');
+const http = require('http')
+const bufferArray = []
 
-http.get(process.argv[2], function (response) {
-  response.pipe(bl(function (err, data) {
-    if (err) {
-      return console.error(err)
-    }
-    data = data.toString()
+http.get(process.argv[2], response => {
+  response.on('data', chunk => {
+    bufferArray.push(chunk)
+  }).on('end', () => {
+    const data = Buffer.concat(bufferArray).toString()
     console.log(data.length)
     console.log(data)
-  }))
+  })
 })
