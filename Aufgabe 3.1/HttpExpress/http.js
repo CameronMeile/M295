@@ -9,3 +9,7 @@ app.get('/', (request, response) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+//npm init
+//npm install express
+//node index.js
