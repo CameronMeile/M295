@@ -1,16 +1,23 @@
-var fs = require('fs')
-var myNumber = undefined
+/* const fs = require('fs')
 
-function addOne(callback) {
-  fs.readFile('number.txt', function doneReading(err, fileContents) {
-    myNumber = parseInt(fileContents)
-    myNumber++
-    callback()
-  })
+fs.readFile(process.argv[2], countNewLines)
+
+function countNewLines (error, text) {
+  if (error) {
+    return console.log(error)
+  }
+  const lineCount = text.toString().split('\n').length - 1
+  console.log(lineCount)
 }
+ */
+const fs = require('fs')
+const file = process.argv[2]
 
-function logMyNumber() {
-  console.log(myNumber)
-}
-
-addOne(logMyNumber)
+fs.readFile(file, function (err, contents) {
+  if (err) {
+    return console.log(err)
+  }
+  // fs.readFile(file, 'utf8', callback) can also be used
+  const lines = contents.toString().split('\n').length - 1
+  console.log(lines)
+})
