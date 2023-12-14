@@ -1,8 +1,8 @@
 const express = require('express');
-
-var fs = require('fs');
-var jpeg = require('jpeg-js');
+const xmlparser = require('express-xml-bodyparser');
+const fs = require('fs');
 const app = express();
+app.use(xmlparser());
 const port = 3000
 
 // View engine setup
@@ -61,6 +61,26 @@ app.get('/html', function (req, res) {
 // Get Image
 app.get('/image', function (req, res) {
     res.sendFile('/workspaces/M295/Aufgabe 3.3/views/CowboyBeebop.jpg');
+})
+
+// Get Teapot
+app.get('/teapot', function (req, res) {
+    res.sendStatus(418);
+})
+
+// Get User/agent
+app.get('/user-agent', function (req, res) {
+    
+})
+
+// Get Secret / 403
+app.get('/secret', function (req, res) {
+    res.sendStatus(403);
+})
+
+// Get xml
+app.get('/xml', function (req, res) {
+    res.render('xml.xml');
 })
 
 // Listen to Port
