@@ -21,6 +21,7 @@ app.post("/names", formHelper, (request, response) => {
     names.add(name)
     response.sendStatus(201)
 })
+// ?method=post&name=CMAE
 
 app.delete("/names", formHelper, (request, response) => {
     const name = request.body.name
@@ -60,6 +61,14 @@ const me = {
 app.get('/me', (request, response) => {
     response.json(me)
 })
+
+// Define the jsonHelper middleware
+const jsonHelper = (request, response, next) => {
+    // Your JSON handling logic goes here
+    // ...
+    next(); // Call next() to proceed to the next middleware
+  }
+  
 
 app.patch('/me', jsonHelper, (request, response) => {
     const merge = request.body
