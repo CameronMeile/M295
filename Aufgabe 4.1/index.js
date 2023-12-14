@@ -16,9 +16,24 @@ const names = new Set(
 )
 
 app.post('/timezone', (req, res) => {
-  const { timezone } = req.body;
-  res.send(`Die ausgewählte Timezone ist: ${timezone}`);
+    const { timezone } = req.body;
+    const currentTime = getCurrentTimeInTimezone(timezone);
+    res.send(`Die aktuelle Zeit in der ausgewählten Timezone (${timezone}) ist: ${currentTime}`);
 });
+
+function getCurrentTimeInTimezone(timezone) {
+    const currentDate = new Date();
+    const options = {
+        timeZone: timezone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    };
+    return currentDate.toLocaleString('de-DE', options);
+}
 
 app.get("/names", (request, response) => {
     response.json(Array.from(names))
@@ -26,9 +41,9 @@ app.get("/names", (request, response) => {
 
 // TODO
 app.post("/names", (request, response) => {
-    response.render('index');
-    const name = request.body.name
-    names.add(name)
+    const { name } = req.body;
+    names.push(name); // Füge den Namen zum Array hinzu
+    res.send(`Name '${name}' wurde dem Array hinzugefügt.`);
     response.sendStatus(201)
 })
 
