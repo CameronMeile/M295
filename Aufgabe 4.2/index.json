@@ -1,0 +1,11 @@
+{
+  "user": {
+    "id": 1,
+    "name": "Max Mustermann",
+    "email": "max.mustermann@example.com",
+    "roles": [
+      "user",
+      "admin"
+    ]
+  }
+}

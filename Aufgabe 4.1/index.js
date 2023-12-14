@@ -3,26 +3,30 @@ const fs = require('fs');
 const app = express();
 const port = 3000
 
+app.use(express.urlencoded({extended: false}));
+app.use(express.json() );
+app.use(express.static('public'));
+
 const names = new Set(["Leonardo", "Michelangelo", "Donatello", "Raphael"])
 
-// Define the formHelper middleware
-const formHelper = (request, response, next) => {
-    // Your form handling logic goes here
-    // ...
-    next(); // Call next() to proceed to the next middleware
-}
+app.get('/now?tz=:time', (req, res) => {
+    res.send(new Date);
+})
 
 app.get("/names", (request, response) => {
     response.json(Array.from(names))
 })
 
+// TODO
 app.post("/names", formHelper, (request, response) => {
+    response.render('index');
     const name = request.body.name
     names.add(name)
     response.sendStatus(201)
 })
 // ?method=post&name=CMAE
 
+// TODO
 app.delete("/names", formHelper, (request, response) => {
     const name = request.body.name
     if (names.has(name)) {
@@ -53,23 +57,16 @@ app.get("/chuck", async (request, response) => {
 const me = {
     firstName: "Cameron",
     lastName: "Meile",
-    age: 36,
-    place: "Uster",
-    eyeColor: "brown"
+    age: 18,
+    place: "Wolfhasuen",
+    eyeColor: "blue"
 }
 
 app.get('/me', (request, response) => {
     response.json(me)
 })
 
-// Define the jsonHelper middleware
-const jsonHelper = (request, response, next) => {
-    // Your JSON handling logic goes here
-    // ...
-    next(); // Call next() to proceed to the next middleware
-  }
-  
-
+// TODO
 app.patch('/me', jsonHelper, (request, response) => {
     const merge = request.body
     const result = {
