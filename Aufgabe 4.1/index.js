@@ -1,13 +1,19 @@
 const express = require('express');
 const fs = require('fs');
+const bodyParser = require('body-parser')
 const app = express();
 const port = 3000
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
 
-app.use(express.urlencoded({extended: false}));
-app.use(express.json() );
-app.use(express.static('public'));
-
-const names = new Set(["Leonardo", "Michelangelo", "Donatello", "Raphael"])
+const names = new Set(
+    [
+        "Leonardo",
+        "Michelangelo",
+        "Donatello",
+        "Raphael"
+    ]
+)
 
 app.get('/now?tz=:time', (req, res) => {
     res.send(new Date);
@@ -18,7 +24,7 @@ app.get("/names", (request, response) => {
 })
 
 // TODO
-app.post("/names", formHelper, (request, response) => {
+app.post("/names", (request, response) => {
     response.render('index');
     const name = request.body.name
     names.add(name)
@@ -27,7 +33,7 @@ app.post("/names", formHelper, (request, response) => {
 // ?method=post&name=CMAE
 
 // TODO
-app.delete("/names", formHelper, (request, response) => {
+app.delete("/names", (request, response) => {
     const name = request.body.name
     if (names.has(name)) {
         names.delete(name)
@@ -67,7 +73,7 @@ app.get('/me', (request, response) => {
 })
 
 // TODO
-app.patch('/me', jsonHelper, (request, response) => {
+app.patch('/me', (request, response) => {
     const merge = request.body
     const result = {
         ...me,
@@ -81,3 +87,5 @@ app.patch('/me', jsonHelper, (request, response) => {
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
+
+// Extension Thunder Client to Test
