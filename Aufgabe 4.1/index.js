@@ -6,14 +6,12 @@ const port = 3000
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
-const names = new Set(
-    [
-        "Leonardo",
-        "Michelangelo",
-        "Donatello",
-        "Raphael"
-    ]
-)
+const names = [
+    "Leonardo",
+    "Michelangelo",
+    "Donatello",
+    "Raphael"
+];
 
 app.post('/timezone', (req, res) => {
     const { timezone } = req.body;
@@ -41,9 +39,9 @@ app.get("/names", (request, response) => {
 
 // TODO
 app.post("/names", (request, response) => {
-    const { name } = req.body;
-    names.push(name); // Füge den Namen zum Array hinzu
-    res.send(`Name '${name}' wurde dem Array hinzugefügt.`);
+    console.log(request.body.name)
+    names.push(request.body.name); // Füge den Namen zum Array hinzu
+    console.log(names);
     response.sendStatus(201)
 })
 
