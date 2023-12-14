@@ -70,7 +70,8 @@ app.get('/teapot', function (req, res) {
 
 // Get User/agent
 app.get('/user-agent', function (req, res) {
-    
+    res.locals.ua = req.get('User-Agent');
+    res.send(res.locals.ua);
 })
 
 // Get Secret / 403
