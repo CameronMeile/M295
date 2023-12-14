@@ -12,6 +12,6 @@ request.get({
     console.log('Status:', res.statusCode);
   } else {
     // data is already parsed as JSON:
-    console.log(data.forecast[0].temperatureMax);
+    console.log(data.currentWeather.temperatureMax);
   }
 });
