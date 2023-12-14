@@ -15,9 +15,10 @@ const names = new Set(
     ]
 )
 
-app.get('/now?tz=:time', (req, res) => {
-    res.send(new Date);
-})
+app.post('/timezone', (req, res) => {
+  const { timezone } = req.body;
+  res.send(`Die ausgewählte Timezone ist: ${timezone}`);
+});
 
 app.get("/names", (request, response) => {
     response.json(Array.from(names))
@@ -30,7 +31,6 @@ app.post("/names", (request, response) => {
     names.add(name)
     response.sendStatus(201)
 })
-// ?method=post&name=CMAE
 
 // TODO
 app.delete("/names", (request, response) => {
@@ -45,7 +45,7 @@ app.delete("/names", (request, response) => {
 
 app.get("/secret2", (request, response) => {
     const auth = request.headers.authorization
-    if (auth == "Basic aGFja2VyOjEyMzQ=") {
+    if (auth == "aGFja2VyOjEyMzQ=") {
         response.sendStatus(200)
     } else {
         response.sendStatus(401)
