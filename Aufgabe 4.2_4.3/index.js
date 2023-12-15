@@ -162,7 +162,7 @@ app.get('/lends', (req, res) => {
 
 // GET | Get all Lend books with isbn
 app.get('/lends/:id', (req, res) => {
-    const { id } = req.params; // Extract the 'isbn' parameter from the request
+    const { id } = req.params; // Extract the 'id' parameter from the request
 
     const lendObject = lend.find(lend => lend.id === id); // Find the lend object based on the lend ID
     const lendISBN = lendObject ? lendObject.isbn : null; // Retrieve the ISBN from the lend object
@@ -200,8 +200,19 @@ app.post('/lends', (req, res) => {
 
 // PATCH | A Lend should get updated
 app.patch('/lends/:id', (req, res) => {
-    
-});
+    const { id } = req.params; // Extract the 'id' parameter from the request URL
+    const updatedData = req.body; // Access the updated data from the request body
+  
+    const lendObject = lend.find((lend) => lend.id === id); // Find the lend object in the 'lend' array that matches the specified 'id'
+  
+    // Check if the lend object exists. If not, return a 404 error response
+    if (!lendObject) {
+      return res.status(404).json({ error: 'Lend not found' });
+    }
+  
+    lendObject.data = updatedData; // Update the lend object with the new data
+    res.json(lendObject); // Return the updated lend object as the response
+  });
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`); // Start the server and log a message indicating the port it's listening on
