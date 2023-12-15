@@ -92,7 +92,7 @@ app.get('/books/:isbn', (req, res) => {
 
 // POST | Add new Book to Books | BEST WAY
 app.post('/books', (req, res) => {
-    books = [... books, req.body];
+    books = [...books, req.body];
     // immutable manipulation
     books.push(req.body);
     res.status('201').json(books);
@@ -175,14 +175,13 @@ app.delete('/books/:isbn', (req, res) => {
 });
 
 // PATCH | BEST WAY
-app.patch('/books/:isbn', (req, res) => {
-    const keys = Object.keys(req.body);
-    const oldbook = books.find((book) => book.isbn === req.params.isbn);
-    keys.forEach((key) => oldbook[key] = req.body[key]);
-
-    books = books.map((book) => book.isbn === req.params.isbn ? oldbook : book);
-    res.json(books);
-});
+app.patch('/books/:isbn', (request, response) => {
+    const keys = Object.keys(request.body);
+    const oldBook = books.find((book) => book.isbn === request.params.isbn );
+    keys.forEach((key) => oldBook[key] = request.body[key]);
+    books = books.map((book) => book.isbn === request.params.isbn ? oldBook : book);
+    response.send(books);
+  });
 //////////////////////////////////////////////////////////////
 
 // GET | Gets only alle Lend books
