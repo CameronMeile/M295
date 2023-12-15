@@ -1,9 +1,11 @@
 const express = require('express')
-const app = express();
-const swagger = require('swagger-express-router');
-const swaggerDocument = require('./swagger.json');
-const useBasePath = true; //whether to use the basePath from the swagger document when setting up the routes (defaults to false)
-const middlewareObj = {
-    'middleware-name1': require('./middleware/middleware-name1')
-};
-swagger.setUpRoutes(middlewareObj, app, swaggerDocument, useBasePath);
+const app = express()
+const port = 3000
+
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`); // Start the server and log a message indicating the port it's listening on
+});
+
+//npm init
+//npm install express
+//node index.js
