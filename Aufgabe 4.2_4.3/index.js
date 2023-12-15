@@ -3,7 +3,7 @@ const app = express()
 const port = 3000
 
 // Generated JSON Book list
-const lend = [
+let lend = [
     {
         id: "1",
         customer_id: "1001",
@@ -40,7 +40,7 @@ const lend = [
         returned_at: "2023-12-08"
     }
 ];
-const books = [
+let books = [
     {
         isbn: "9780061120084",
         title: "To Kill a Mockingbird",
@@ -90,8 +90,16 @@ app.get('/books/:isbn', (req, res) => {
     }
 });
 
-// POST | Add new Book to Books
+// POST | Add new Book to Books | BEST WAY
 app.post('/books', (req, res) => {
+    books = [... books, req.body];
+    // immutable manipulation
+    books.push(req.body);
+    res.status('201').json(books);
+})
+
+// POST | Add new Book to Books
+/* app.post('/books', (req, res) => {
     let requestBody = '';
 
     // Listen for the 'data' event to capture chunks of the request body
@@ -110,10 +118,10 @@ app.post('/books', (req, res) => {
         // Send a response indicating that the book was added successfully with a status code of 201
         res.status(201).send('Book added successfully');
     });
-});
+}); */
 
 // PUT | Überschreibung der isbn von einem Buch
-app.put('/books/:isbn', (req, res) => {
+/* app.put('/books/:isbn', (req, res) => {
     const { isbn } = req.params; // Extract the 'isbn' parameter from the request URL
     let body = ''; // Initialize an empty string to store the request body
 
@@ -138,9 +146,16 @@ app.put('/books/:isbn', (req, res) => {
             res.status(400).send('Invalid JSON payload'); // If there's an error parsing the JSON or accessing the 'isbn' property, send a 400 status and an error message
         }
     });
+}); */
+
+// PUT | Überschreibung der isbn von einem Buch | BEST WAY
+app.put('/books/:isbn', (req, res) => {
+    books = books.map((book) => book.isbn === req.params.isbn ? req.body : book);
+    res.json(books);
 });
 
-app.delete('/books/:isbn', (req, res) => {
+// DELETE | Löschen book
+/* app.delete('/books/:isbn', (req, res) => {
     const { isbn } = req.params; // Extract the 'isbn' parameter from the request
 
     const bookIndex = books.findIndex((book) => book.isbn === isbn); // Find the index of the book with matching 'isbn'
@@ -151,8 +166,23 @@ app.delete('/books/:isbn', (req, res) => {
     } else {
         res.status(404).send('Book not found'); // If no matching book is found, send a 404 status and an error message
     }
+}); */
+
+// DELETE | Löschen book | BEST WAY
+app.delete('/books/:isbn', (req, res) => {
+    books = books.filter((book) => book.isbn !== req.params.isbn);
+    res.json(books);
 });
 
+// PATCH | BEST WAY
+app.patch('/books/:isbn', (req, res) => {
+    const keys = Object.keys(req.body);
+    const oldbook = books.find((book) => book.isbn === req.params.isbn);
+    keys.forEach((key) => oldbook[key] = req.body[key]);
+
+    books = books.map((book) => book.isbn === req.params.isbn ? oldbook : book);
+    res.json(books);
+});
 //////////////////////////////////////////////////////////////
 
 // GET | Gets only alle Lend books
@@ -202,17 +232,17 @@ app.post('/lends', (req, res) => {
 app.patch('/lends/:id', (req, res) => {
     const { id } = req.params; // Extract the 'id' parameter from the request URL
     const updatedData = req.body; // Access the updated data from the request body
-  
+
     const lendObject = lend.find((lend) => lend.id === id); // Find the lend object in the 'lend' array that matches the specified 'id'
-  
+
     // Check if the lend object exists. If not, return a 404 error response
     if (!lendObject) {
-      return res.status(404).json({ error: 'Lend not found' });
+        return res.status(404).json({ error: 'Lend not found' });
     }
-  
+
     lendObject.data = updatedData; // Update the lend object with the new data
     res.json(lendObject); // Return the updated lend object as the response
-  });
+});
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`); // Start the server and log a message indicating the port it's listening on
