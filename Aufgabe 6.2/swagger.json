@@ -1,29 +1,80 @@
-...
-"scripts": {
-  ...
-  "swagger": "node ./swagger.js"
-}
-
 {
-    "swagger": "2.0",
-    "info": {
-      "title": "",
-      "description": "",
-      "version": "1.0"
-    },
-    "produces": ["application/json"],
-    "host": "localhost:8000",
-    "basePath": "/api/swagger/v1",
-    "paths": {
-      "/test1": {
-        "get": {
-          "x-swagger-router-controller": "middleware-name1",
-          "operationId": "swagTest",
-          "tags": ["/test"],
-          "description": "",
-          "parameters": [],
-          "responses": {}
+  "swagger": "2.0",
+  "info": {
+    "title": "Biblokthek",
+    "description": "This is a Bibliothek, You can Search for Books and also can Lend them out :D",
+    "version": "1.0"
+  },
+  "produces": [
+    "application/json"
+  ],
+  "host": "localhost:3000",
+  "basePath": "/api/swagger/v1",
+  "paths": {
+    "/books": {
+      "get": {
+        "operationId": "swagTest",
+        "tags": [
+          "Bibliothek"
+        ],
+        "description": "Get all books in a JSON format",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "isbn",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Get All Books"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Book"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
         }
       }
+    },
+    "/books/{isbn}": {
+      "get": {
+        "operationId": "swagTest",
+        "tags": [
+          "/get/{isbn}"
+        ],
+        "description": "With /books/:isbn you get the book you are searching for.",
+        "parameters": [],
+        "responses": {}
+      }
     }
- }
+  }
+}

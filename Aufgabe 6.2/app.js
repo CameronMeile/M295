@@ -1,16 +1,14 @@
-const swaggerUi = require('swagger-ui-express')
-const swaggerFile = require('./swagger-output.json')
-const bodyParser = require('body-parser')
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
-/* Middlewares */
-app.use(bodyParser.json())
-app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+app.use('/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.listen(3000, () => {
-  console.log("Server is running!\nAPI documentation: http://localhost:3000/doc")
+app.get('/swagger-ui', (req, res) => {
+    res.sendFile('/workspaces/M295/Aufgabe 6.2/swagger.json');
 })
 
-/* Endpoints */
-require('./src/endpoints')(app)
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
