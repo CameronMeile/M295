@@ -3,41 +3,73 @@ const app = express()
 const port = 3000
 
 // Generated JSON Book list
+const lend = [
+    {
+        id: "1",
+        customer_id: "1001",
+        isbn: "9780061120084",
+        borrowed_at: "2023-12-10",
+        returned_at: "2023-12-15"
+    },
+    {
+        id: "2",
+        customer_id: "1002",
+        isbn: "9781984801810",
+        borrowed_at: "2023-11-28",
+        returned_at: "2023-12-05"
+    },
+    {
+        id: "3",
+        customer_id: "1003",
+        isbn: "9780451524935",
+        borrowed_at: "2023-12-03",
+        returned_at: "2023-12-10"
+    },
+    {
+        id: "4",
+        customer_id: "1004",
+        isbn: "9780140283334",
+        borrowed_at: "2023-12-08",
+        returned_at: "2023-12-13"
+    },
+    {
+        id: "5",
+        customer_id: "1005",
+        isbn: "9780062315007",
+        borrowed_at: "2023-12-01",
+        returned_at: "2023-12-08"
+    }
+];
 const books = [
     {
         isbn: "9780061120084",
         title: "To Kill a Mockingbird",
         year: "1960",
         author: "Harper Lee",
-        lend: false
     },
     {
         isbn: "9781984801810",
         title: "Educated: A Memoir",
         year: "2018",
         author: "Tara Westover",
-        lend: true
     },
     {
         isbn: "9780451524935",
         title: "1984",
         year: "1949",
         author: "George Orwell",
-        lend: false
     },
     {
         isbn: "9780140283334",
         title: "The Catcher in the Rye",
         year: "1951",
         author: "J.D. Salinger",
-        lend: true
     },
     {
         isbn: "9780062315007",
         title: "The Alchemist",
         year: "1988",
         author: "Paulo Coelho",
-        lend: false
     }
 ];
 
@@ -119,6 +151,56 @@ app.delete('/books/:isbn', (req, res) => {
     } else {
         res.status(404).send('Book not found'); // If no matching book is found, send a 404 status and an error message
     }
+});
+
+//////////////////////////////////////////////////////////////
+
+// GET | Gets only alle Lend books
+app.get('/lends', (req, res) => {
+    res.json(lend); // Output JSON with all lend books
+});
+
+// GET | Get all Lend books with isbn
+app.get('/lends/:id', (req, res) => {
+    const { id } = req.params; // Extract the 'isbn' parameter from the request
+
+    const lendObject = lend.find(lend => lend.id === id); // Find the lend object based on the lend ID
+    const lendISBN = lendObject ? lendObject.isbn : null; // Retrieve the ISBN from the lend object
+
+    const book = books.find(book => book.isbn === lendISBN); // Find the book object based on the ISBN
+
+    if (book) { // If a matching book is found
+        res.json(book); // Send the book in the response
+    } else {
+        res.status(404).send('Book not found or Is Lend'); // If no matching book is found, send a 404 status and an error message
+    }
+})
+
+// POST | Lend a new book
+app.post('/lends', (req, res) => {
+    let requestBody = '';
+
+    // Listen for the 'data' event to capture chunks of the request body
+    req.on('data', (chunk) => {
+        requestBody += chunk;
+    });
+
+    // Listen for the 'end' event to indicate that the entire request body has been received
+    req.on('end', () => {
+        // Parse the request body as JSON into a JavaScript object
+        const newlend = JSON.parse(requestBody);
+
+        // Add the new book to the 'lend' array
+        lend.push(newlend);
+
+        // Send a response indicating that the lend was added successfully with a status code of 201
+        res.status(201).send('Lend added successfully');
+    });
+});
+
+// PATCH | A Lend should get updated
+app.patch('/lends/:id', (req, res) => {
+    
 });
 
 app.listen(port, () => {
