@@ -10,10 +10,10 @@ router.use(session({
 }));
 
 router.get('/', (req, res) => {
-    res.status(200).send(res.session.name)
-});
+    res.status(200).send(req.session.name);
+  });
 
-router.get('/:Newname', (req, res) => {
+router.post('/:Newname', (req, res) => {
     const name = req.params.Newname;
 
     if (name) {
@@ -23,5 +23,10 @@ router.get('/:Newname', (req, res) => {
         res.status(400).send('Invalid name');
     }
 });
+
+router.delete('/', (req, res) => {
+    delete req.session.name;
+    res.status(200).send('Name deleted in session successfully');
+  });
 
 module.exports = router;
