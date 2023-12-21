@@ -30,7 +30,7 @@ app.post('/login', function (request, response) {
 		// Link email to session
 		request.session.email = email
 
-		return response.status(200).json({ email: request.session.email })
+		return response.status(201).json({ email: request.session.email })
 	}
 
   return response.status(401).json({ error: "Invalid credentials" })
