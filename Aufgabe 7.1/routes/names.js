@@ -1,33 +1,27 @@
 const express = require('express');
+const session = require('express-session');
 const router = express.Router();
 const port = 3000;
 
-let nameList = [
-    "John",
-    "Emma",
-    "Michael",
-    "Sophia",
-    "David",
-    "Olivia",
-    "Daniel",
-    "Ava",
-    "Sarah",
-    "Benjamin"
-];
+router.use(session({
+    secret: 'supersecret',
+    resave: false,
+    saveUninitialized: true
+}));
 
 router.get('/', (req, res) => {
-    res.status(200).json(nameList);
+    res.status(200).send(res.session.name)
 });
 
-router.post('/:name', (req, res) => {
-    const newName = req.params.name;
-  
-    if (!newName) {
-      return res.status(400).json({ error: 'Invalid name parameter' });
+router.get('/:Newname', (req, res) => {
+    const name = req.params.Newname;
+
+    if (name) {
+        req.session.name = name;
+        res.status(201).send('Name stored in session successfully');
+    } else {
+        res.status(400).send('Invalid name');
     }
-  
-    nameList.push(newName);
-    res.status(201).json(nameList);
-  });
+});
 
 module.exports = router;
