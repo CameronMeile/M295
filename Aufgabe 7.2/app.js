@@ -11,14 +11,14 @@ app.use(express.json());
 const LoginData = { email: "desk@library.example", password: "m295" }
 
 app.use(session({
-  secret: 'supersecret',
+	secret: 'supersecret',
 	resave: false,
 	saveUninitialized: false,
-  cookie: {}
+	cookie: {}
 }));
 
 app.get('/', (req, res) => {
-    res.send('Aufgabe 7.2 | Login with next()');
+	res.send('Aufgabe 7.2 | Login with next()');
 });
 
 app.post('/login', function (request, response) {
@@ -33,7 +33,7 @@ app.post('/login', function (request, response) {
 		return response.status(201).json({ email: request.session.email })
 	}
 
-  return response.status(401).json({ error: "Invalid credentials" })
+	return response.status(401).json({ error: "Invalid credentials" })
 });
 
 app.delete('/logout', function (request, response) {
@@ -47,7 +47,7 @@ app.delete('/logout', function (request, response) {
 		return response.status(204).send()
 	}
 
-  return response.status(401).json({ error: "Not logged in" })
+	return response.status(401).json({ error: "Not logged in" })
 });
 
 const lendsRouter = require('./routes/lends');
@@ -58,5 +58,5 @@ app.use('/books ', booksRouter);
 
 // Server
 app.listen(port, () => {
-  console.log(`Bookstore app listening on port ${port}`);
-});
+	console.log(`Bookstore app listening on port ${port}`)
+})
