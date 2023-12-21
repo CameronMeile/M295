@@ -1,36 +1,17 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
-    "title": "Biblokthek",
-    "description": "This is a Bibliothek, You can Search for Books and also can Lend them out :D",
-    "version": "1.0"
+    "title": "Library API",
+    "description": "This is an API for managing books and lends in a library.",
+    "version": "1.0.0"
   },
-  "produces": [
-    "application/json"
-  ],
-  "host": "localhost:3000",
-  "basePath": "/api/swagger/v1",
   "paths": {
     "/books": {
       "get": {
-        "operationId": "swagTest",
-        "tags": [
-          "Bibliothek"
-        ],
-        "description": "Get all books in a JSON format",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "isbn",
-            "schema": {
-              "type": "string"
-            },
-            "description": "Get All Books"
-          }
-        ],
+        "summary": "Get a list of all books",
         "responses": {
           "200": {
-            "description": "Successful response",
+            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
@@ -41,23 +22,28 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new book",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewBook"
               }
             }
-          },
-          "500": {
-            "description": "Internal server error",
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Book"
                 }
               }
             }
@@ -66,14 +52,258 @@
       }
     },
     "/books/{isbn}": {
-      "get": {
-        "operationId": "swagTest",
-        "tags": [
-          "/get/{isbn}"
+      "put": {
+        "summary": "Update a book by ISBN",
+        "parameters": [
+          {
+            "name": "isbn",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
-        "description": "With /books/:isbn you get the book you are searching for.",
-        "parameters": [],
-        "responses": {}
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBook"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a book by ISBN",
+        "parameters": [
+          {
+            "name": "isbn",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/lends": {
+      "get": {
+        "summary": "Get a list of all lends",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Lend"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new lend",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewLend"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Lend"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lends/{isbn}": {
+      "get": {
+        "summary": "Get a lend by ISBN",
+        "parameters": [
+          {
+            "name": "isbn",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Lend"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a lend by ISBN",
+        "parameters": [
+          {
+            "name": "isbn",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLend"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Lend"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a lend by ISBN",
+        "parameters": [
+          {
+            "name": "isbn",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Book": {
+        "type": "object",
+        "properties": {
+          "isbn": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          }
+        }
+      },
+      "NewBook": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateBook": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          }
+        }
+      },
+      "Lend": {
+        "type": "object",
+        "properties": {
+          "isbn": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "NewLend": {
+        "type": "object",
+        "properties": {
+          "isbn": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateLend": {
+        "type": "object",
+        "properties": {
+          "dueDate": {
+            "type": "string",
+            "format": "date"
+          }
+        }
       }
     }
   }
